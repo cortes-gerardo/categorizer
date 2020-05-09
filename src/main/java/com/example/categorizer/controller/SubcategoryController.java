@@ -1,5 +1,6 @@
 package com.example.categorizer.controller;
 
+import com.example.categorizer.model.SubcategoryCategoryWrapper;
 import com.example.categorizer.model.SubcategoryModel;
 import com.example.categorizer.service.SubcategoryService;
 import org.slf4j.Logger;
@@ -31,19 +32,21 @@ public class SubcategoryController {
 
     @RequestMapping(value = "/subcategories", method = GET, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<Iterable<SubcategoryModel>> get() {
-        return ResponseEntity.ok(service.list().collect(toList()));
+    ResponseEntity<SubcategoryCategoryWrapper> get() {
+        return ResponseEntity.ok(service.wrapper());
     }
 
     @RequestMapping(value = "/subcategory", method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<SubcategoryModel> post(final @RequestBody SubcategoryModel subcategoryModel) {
-        return ResponseEntity.ok(service.save(subcategoryModel));
+    ResponseEntity<SubcategoryCategoryWrapper> post(final @RequestBody SubcategoryModel subcategoryModel) {
+        service.save(subcategoryModel);
+        return ResponseEntity.ok(service.wrapper());
     }
 
     @RequestMapping(value = "/subcategories", method = POST, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public @ResponseBody
-    ResponseEntity<List<SubcategoryModel>> post(final @RequestBody List<SubcategoryModel> subcategories) {
-        return ResponseEntity.ok(service.save(subcategories.stream()).collect(toList()));
+    ResponseEntity<SubcategoryCategoryWrapper> post(final @RequestBody List<SubcategoryModel> subcategories) {
+        service.save(subcategories.stream());
+        return ResponseEntity.ok(service.wrapper());
     }
 }

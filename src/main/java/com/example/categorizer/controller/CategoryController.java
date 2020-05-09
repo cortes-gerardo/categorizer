@@ -1,5 +1,6 @@
 package com.example.categorizer.controller;
 
+import com.example.categorizer.model.CategoryCount;
 import com.example.categorizer.model.CategoryModel;
 import com.example.categorizer.service.CategoryService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/categories", method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
-    ResponseEntity<Iterable<CategoryModel>> get() {
+    ResponseEntity<Iterable<CategoryCount>> get() {
         return ResponseEntity.ok(service.list().collect(toList()));
     }
 

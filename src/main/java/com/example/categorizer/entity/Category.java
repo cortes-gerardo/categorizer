@@ -1,6 +1,7 @@
 package com.example.categorizer.entity;
 
 import com.example.categorizer.model.CategoryModel;
+import com.google.common.base.Objects;
 
 import javax.persistence.*;
 
@@ -9,7 +10,6 @@ import java.util.Set;
 import static com.google.common.base.MoreObjects.toStringHelper;
 
 @Entity
-@Table(indexes = {@Index(columnList = "name")})
 public class Category {
     @Id
     @GeneratedValue
@@ -28,6 +28,11 @@ public class Category {
         return new Category(model.getCategory());
     }
 
+    public Category(final Short id, final String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Category(final String name) {
         this.name = name;
     }
@@ -42,6 +47,21 @@ public class Category {
 
     public Set<Subcategory> getSubcategories() {
         return subcategories;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        final Category category = (Category) o;
+        return Objects.equal(id, category.id) &&
+                Objects.equal(name, category.name) &&
+                Objects.equal(subcategories, category.subcategories);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, subcategories);
     }
 
     @Override

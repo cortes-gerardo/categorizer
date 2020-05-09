@@ -1,5 +1,6 @@
 package com.example.categorizer.controller;
 
+import com.example.categorizer.model.CategoryCount;
 import com.example.categorizer.model.CategoryModel;
 import com.example.categorizer.service.CategoryService;
 import com.google.gson.Gson;
@@ -36,10 +37,14 @@ class CategoryControllerTest {
             new CategoryModel("TEST1"),
             new CategoryModel("TEST2")
     );
+    private final Collection<CategoryCount> stubCounts = Arrays.asList(
+            new CategoryCount("TEST1", 5L),
+            new CategoryCount("TEST2", 9L)
+    );
 
     @Test
     void whenGetRequested_thenRespondedWith200AndCategories() throws Exception {
-        when(mockService.list()).thenReturn(stubModels.stream());
+        when(mockService.list()).thenReturn(stubCounts.stream());
 
         this.mockMvc.perform(
                 get("/categories")
@@ -48,7 +53,9 @@ class CategoryControllerTest {
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].category", is("TEST1")))
+                .andExpect(jsonPath("$[0].count", is(5)))
                 .andExpect(jsonPath("$[1].category", is("TEST2")))
+                .andExpect(jsonPath("$[1].count", is(9)))
                 .andDo(log());
 
         verify(mockService, times(1)).list();

@@ -1,6 +1,7 @@
 package com.example.categorizer.service;
 
 import com.example.categorizer.entity.Category;
+import com.example.categorizer.model.CategoryCount;
 import com.example.categorizer.model.CategoryModel;
 import com.example.categorizer.repository.CategoryRepository;
 import org.slf4j.Logger;
@@ -25,8 +26,8 @@ public class CategoryService extends AbstractService {
         this.repository = repository;
     }
 
-    public Stream<CategoryModel> list() {
-        return findAll().stream().map(CategoryModel::of);
+    public Stream<CategoryCount> list() {
+        return queryCount().stream();
     }
 
     public CategoryModel save(final CategoryModel model) {
@@ -40,6 +41,7 @@ public class CategoryService extends AbstractService {
                 .filter(model -> find(model).isEmpty())
                 .map(Category::of)
                 .collect(toList());
+
         return saveAll(validCategories).stream()
                 .map(CategoryModel::of);
     }
@@ -49,13 +51,16 @@ public class CategoryService extends AbstractService {
     }
 
     public void delete(final Stream<CategoryModel> models) {
-        List<String> names = models.map(CategoryModel::getCategory).collect(toList());
-        List<Category> categories = repository.findAllByNameIn(names);
+        List<Category> categories = findAllByNameIn(models.map(CategoryModel::getCategory).collect(toList()));
         deleteAll(categories);
     }
 
-    private List<Category> findAll() {
-        return tryOrThrow(repository::findAll, "findAll");
+    private List<Category> findAllByNameIn(final List<String> names) {
+        return tryOrThrow(() -> repository.findAllByNameIn(names), "findAllByNameIn");
+    }
+
+    private List<CategoryCount> queryCount() {
+        return tryOrThrow(repository::queryCategoryCount, "queryCount");
     }
 
     private Category save(final Category category) {

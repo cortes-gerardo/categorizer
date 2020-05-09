@@ -2,6 +2,7 @@ package com.example.categorizer.entity;
 
 import com.example.categorizer.model.SubcategoryModel;
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 import javax.persistence.*;
 
@@ -37,6 +38,21 @@ public class Subcategory {
 
     public Category getCategory() {
         return category;
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Subcategory)) return false;
+        final Subcategory that = (Subcategory) o;
+        return Objects.equal(id, that.id) &&
+                Objects.equal(name, that.name) &&
+                Objects.equal(category, that.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id, name, category);
     }
 
     @Override

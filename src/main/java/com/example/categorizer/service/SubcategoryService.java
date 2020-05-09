@@ -1,6 +1,7 @@
 package com.example.categorizer.service;
 
 import com.example.categorizer.entity.Subcategory;
+import com.example.categorizer.model.SubcategoryCategoryWrapper;
 import com.example.categorizer.model.SubcategoryModel;
 import com.example.categorizer.repository.SubcategoryRepository;
 import org.slf4j.Logger;
@@ -28,22 +29,27 @@ public class SubcategoryService extends AbstractService {
         this.categoryService = categoryService;
     }
 
+    public SubcategoryCategoryWrapper wrapper() {
+        return new SubcategoryCategoryWrapper(list().collect(toList()), categoryService.list().collect(toList()));
+    }
+
     public Stream<SubcategoryModel> list() {
         return findAll().stream().map(SubcategoryModel::of);
     }
 
     public SubcategoryModel save(final SubcategoryModel model) {
-        return find(model)
+        return findByNameAndCategoryId(model)
                 .map(SubcategoryModel::of)
                 .orElseGet(() -> categoryService.find(model)
                         .map(category -> SubcategoryModel.of(save(Subcategory.of(model, category))))
-                        .orElseThrow() //FIXME
+                        .orElseThrow()
                 );
     }
 
     public Stream<SubcategoryModel> save(final Stream<SubcategoryModel> models) {
         List<Subcategory> validSubcategories = models
-                .filter(model -> find(model).isEmpty())
+                .distinct()
+                .filter(model -> findByNameAndCategoryId(model).isEmpty())
                 .map(model -> categoryService.find(model)
                         .map(category -> Subcategory.of(model, category)))
                 .flatMap(Optional::stream)
@@ -65,9 +71,12 @@ public class SubcategoryService extends AbstractService {
         return tryOrThrow(() -> repository.saveAll(validSubcategories), "saveAll");
     }
 
-    private Optional<Subcategory> find(SubcategoryModel model) {
-        return tryOrThrow(() -> categoryService.find(model)
-                .flatMap(category -> repository.findByNameAndCategoryId(model.getSubcategory(), category.getId())),
+    private Optional<Subcategory> findByNameAndCategoryId(SubcategoryModel model) {
+        return tryOrThrow(
+                () -> categoryService.find(model)
+                        .flatMap(
+                                category -> repository.findByNameAndCategoryId(model.getSubcategory(), category.getId())
+                        ),
                 "findByNameAndCategoryId");
     }
 
