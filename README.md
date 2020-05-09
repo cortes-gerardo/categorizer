@@ -1,8 +1,10 @@
 # Categorizer API
 
 ## Purpose
+This is a demo spring-boot demo project.
+
 It classifies items into categories and store them in an in-memory DB.
-The data is a list of category sub-category
+The data is a list of category subcategory pairs.
 
 |Category   |Subcategory|
 |--------   |-----------|
@@ -28,7 +30,17 @@ There is a list of valid categories managed by the API. By default, the valid ca
 |COMPUTER   |
 |OTHER      |
 
-This is a demo spring-boot project.
+## Table of Contents
+<!--ts-->
+   * [Purpose](#purpose)
+   * [Setting Up](#setting-up)
+      * [Technology Stack](#technology-stack)
+      * [Deploy](#deploy)
+   * [Getting Started](#getting-started)
+      * [Endpoints](#endpoints)
+      * [Data Base](#data-base)
+      * [Monitoring](#monitoring)
+<!--te-->
 
 ---
 
@@ -40,46 +52,38 @@ What do we need for local Development.
 - Spring Boot 2.2.7
 - Maven 3.6.1
 
-### Installation Guide
-- VM options
-- Environment variables
-- Ports
-- IntelliJ Plugins
-- ...
-
-### Build
 ### Deploy
-```bash
-mvn clean compile test
-```
----
 
+```
+mvn clean compile test package
+```
 
 ---
 
 ## Getting Started
-> How can we use it? How do we know it is working?
+How can we use it
 
-### Architecture
-### Servers
-### Known clients
+### Endpoints
+the applications have different endpoints to manage 
+```
+```
 
-### Dependencies
+### Data Base
+I'm using an in-memory data base, H2 allows see at it's content in the browser once the application is runnig.
+```
+http://localhost:8080/h2-console
+```
 
-### Cron Jobs
-### Pipeline
+You need to use this URL
+```
+jdbc:h2:mem:testdb
+```
+
 ### Monitoring
-### Alerting
+There is and endpoint dedicated to recollect metrics in a prometheus server
+```
+http://localhost:8080/actuator/prometheus
+```
 
 ### API documentation
-[Endpoints](#)
 
-### Troubleshooting
-|Integration      |Prod02           |
-|-----------------|-----------------|
-|[Manager](#)     |[Manager](#)     |
-|[Ping](http://int-notifications-vip.bcinfra.net/notifications-api/health)        |[Ping](#)        |
-|[Health Check](http://int-notifications-vip.bcinfra.net/notifications-api/health)|[Health Check](#)|
-|[DB Check](#)    |[DB Check](#)    |
-
-### Known errors
