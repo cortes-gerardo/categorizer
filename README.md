@@ -64,10 +64,144 @@ mvn clean compile test package
 How can we use it
 
 ### Endpoints
-the applications have different endpoints to manage 
+the applications have different endpoints to manage;
+#### Category management
+- list categories
 ```
+GET http://localhost:8080/categories
+```
+- save category
+```
+POST http://localhost:8080/category
+```
+```json 
+{
+    "category": "TEST"
+}
+```
+- save categories
+```
+POST http://localhost:8080/categories
+```
+```json
+[
+    {
+        "category": "ANIMAL"
+    },
+    {
+        "category": "COMPUTER"
+    },
+    {
+        "category": "OTHER"
+    },
+    {
+        "category": "PERSON"
+    },
+    {
+        "category": "PLACE"
+    }
+]
+```
+- delete category
+```
+DELETE http://localhost:8080/category
+```
+```json 
+{
+    "category": "TEST"
+}
+```
+- delete categories
+```
+DELETE http://localhost:8080/categories
+```
+```json
+[
+    {
+        "category": "ANIMAL"
+    },
+    {
+        "category": "COMPUTER"
+    },
+    {
+        "category": "OTHER"
+    },
+    {
+        "category": "PERSON"
+    },
+    {
+        "category": "PLACE"
+    }
+]
 ```
 
+#### Subcategory management
+- list subcategories
+```
+GET http://localhost:8080/subcategories
+```
+- save subcategory
+```
+POST http://localhost:8080/subcategory
+```
+```json
+{
+    "category": "PERSON",
+    "subcategory": "Gerardo"
+}
+```
+- save subcategories
+```
+POST http://localhost:8080/subcategories
+```
+```json
+[
+    {
+        "category": "PERSON",
+        "subcategory": "Bob Jones"
+    },
+    {
+        "category": "PLACE",
+        "subcategory": "Washington"
+    },
+    {
+        "category": "PERSON",
+        "subcategory": "Mary"
+    },
+    {
+        "category": "COMPUTER",
+        "subcategory": "Mac"
+    },
+    {
+        "category": "PERSON",
+        "subcategory": "Bob Jones"
+    },
+    {
+        "category": "OTHER",
+        "subcategory": "Tree"
+    },
+    {
+        "category": "ANIMAL",
+        "subcategory": "Dog"
+    },
+    {
+        "category": "PLACE",
+        "subcategory": "Texas"
+    },
+    {
+        "category": "FOOD",
+        "subcategory": "Steak"
+    },
+    {
+        "category": "ANIMAL",
+        "subcategory": "Cat"
+    },
+    {
+        "category": "PERSON",
+        "subcategory": "Mac"
+    }
+]
+```
 ### Data Base
 I'm using an in-memory data base, H2 allows see at it's content in the browser once the application is runnig.
 ```
